@@ -15,7 +15,7 @@ namespace SetParentKK
 	public class KK_SetParentVR : BaseUnityPlugin
 	{
 		public const string GUID = "MK.KK_SetParentVR";
-		public const string Version = "2.1.8";
+		public const string Version = "2.1.9";
 		public const string PluginName = "SetParentVR";
 		public const string AssembName = "KK_SetParentVR";
 		internal static SetParent setParentObj;
