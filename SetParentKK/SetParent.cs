@@ -334,8 +334,7 @@ namespace SetParentKK
 					/////////////////////////
 					Vector3 cameraVec = cameraEye.transform.position - maleCrotchPos.transform.position;
 					Vector3 maleSpineVec = maleHeadPos.transform.position - maleCrotchPos.transform.position;
-					Quaternion.FromToRotation(maleSpineVec, cameraVec).ToAngleAxis(out float lookRotAngle, out Vector3 lookRotAxis);
-					male_p_cf_bodybone.transform.RotateAround(maleCrotchPos.transform.position, lookRotAxis, lookRotAngle);
+					RotateMaleAroundCrotch(maleSpineVec, cameraVec, "spine");
 
 					/////////////////////////
 					// Update position of the spine vector, and using it as an axis to rotate the male body to "look" left or right by following the HMD's rotation
@@ -349,8 +348,7 @@ namespace SetParentKK
 						maleSpineVec = maleHeadPos.transform.position - maleCrotchPos.transform.position;
 						Vector3 malePenisProjected = Vector3.ProjectOnPlane(maleCrotchPos.transform.forward, maleSpineVec);
 						Vector3 cameraForwardProjected = Quaternion.AngleAxis(-90, maleSpineVec) * Vector3.ProjectOnPlane(cameraEye.transform.right, maleSpineVec);
-						Quaternion.FromToRotation(malePenisProjected, cameraForwardProjected).ToAngleAxis(out lookRotAngle, out lookRotAxis);
-						male_p_cf_bodybone.transform.RotateAround(maleCrotchPos.transform.position, lookRotAxis, lookRotAngle);
+						RotateMaleAroundCrotch(malePenisProjected, cameraForwardProjected, "yaw");
 					}
 				}
 
@@ -387,7 +385,79 @@ namespace SetParentKK
 
 
 			if ((setFlag && SetParentMode.Value < ParentMode.AnimationOnly) || currentCtrlstate == CtrlState.Following || currentCtrlstate == CtrlState.FemaleControl)
-				FemalePositionUpdate(femaleSpinePos);	
+				FemalePositionUpdate(femaleSpinePos);
+
+			CheckBonesForNaN();
+		}
+
+		/// <summary>
+		/// Rotate the male body around the crotch by the rotation from one vector to another.
+		/// The rotation is skipped when a vector is zero or not finite, or when the resulting angle or axis is not finite,
+		/// since RotateAround is cumulative and a single NaN would stay in the male body for good.
+		/// </summary>
+		private void RotateMaleAroundCrotch(Vector3 from, Vector3 to, string step)
+		{
+			float angle = 0f;
+			Vector3 axis = Vector3.zero;
+			bool valid = IsFinite(from) && IsFinite(to) && from.sqrMagnitude > 1e-8f && to.sqrMagnitude > 1e-8f;
+			if (valid)
+			{
+				Quaternion.FromToRotation(from, to).ToAngleAxis(out angle, out axis);
+				valid = !float.IsNaN(angle) && !float.IsInfinity(angle) && IsFinite(axis) && axis.sqrMagnitude > 1e-8f;
+			}
+
+			if (!valid)
+			{
+				if (!rotateSkipLogged)
+				{
+					KK_SetParentVR.Log.LogWarning($"Skipped a male rotation ({step}) that would give NaN: from {from:F4}, to {to:F4}, angle {angle}, axis {axis:F4}, state {currentCtrlstate}, animation {hFlag.nowAnimStateName}");
+					rotateSkipLogged = true;
+				}
+				return;
+			}
+			rotateSkipLogged = false;
+			male_p_cf_bodybone.transform.RotateAround(maleCrotchPos.transform.position, axis, angle);
+		}
+
+		/// <summary>
+		/// Diagnostic: log the first frame in which a NaN appears in the main bones of either character (once until they are finite again)
+		/// </summary>
+		private void CheckBonesForNaN()
+		{
+			string bad = null;
+			if (!IsFinite(female_p_cf_bodybone))
+				bad = "female p_cf_body_bone";
+			else if (!IsFinite(female_cf_j_hips))
+				bad = "female cf_j_hips";
+			else if (!IsFinite(male_p_cf_bodybone))
+				bad = "male p_cf_body_bone";
+			else if (maleFBBIK != null && maleFBBIK.references.pelvis != null && !IsFinite(maleFBBIK.references.pelvis.gameObject))
+				bad = "male cf_j_hips";
+			else if (!IsFinite(femaleSpinePos))
+				bad = "femaleSpinePos";
+
+			if (bad == null)
+			{
+				if (nanLogged)
+					KK_SetParentVR.Log.LogInfo("Bones are finite again");
+				nanLogged = false;
+				return;
+			}
+			if (nanLogged)
+				return;
+			nanLogged = true;
+			KK_SetParentVR.Log.LogWarning($"NaN/Infinity found in {bad} at frame {Time.frameCount}: state {currentCtrlstate}, SetParent {(setFlag ? "on" : "off")}, mode {SetParentMode.Value}, animation {hFlag.nowAnimStateName}, male parent {(male_p_cf_bodybone != null && male_p_cf_bodybone.transform.parent != null ? male_p_cf_bodybone.transform.parent.name : "none")}");
+		}
+
+		private static bool IsFinite(Vector3 v) =>
+			!float.IsNaN(v.x) && !float.IsNaN(v.y) && !float.IsNaN(v.z) && !float.IsInfinity(v.x) && !float.IsInfinity(v.y) && !float.IsInfinity(v.z);
+
+		private static bool IsFinite(GameObject obj)
+		{
+			if (obj == null)
+				return true;
+			Quaternion q = obj.transform.rotation;
+			return IsFinite(obj.transform.position) && IsFinite(new Vector3(q.x, q.y, q.z)) && !float.IsNaN(q.w) && !float.IsInfinity(q.w);
 		}
 
 		/// <summary>
@@ -904,6 +974,10 @@ namespace SetParentKK
 		internal CtrlState currentCtrlstate;
 		
 		internal bool setFlag;
+
+		private bool rotateSkipLogged;
+
+		private bool nanLogged;
 
 		private bool femaleExists;
 
