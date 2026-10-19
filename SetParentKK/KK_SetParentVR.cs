@@ -97,8 +97,13 @@ namespace SetParentKK
 			Log = Logger;
 			BindConfig();
 
-			if (!Application.dataPath.EndsWith("KoikatuVR_Data"))
+			//Patch only in official VR: Koikatsu VR (KoikatuVR_Data) and Koikatsu Party VR (Koikatsu Party VR_Data).
+			//VRHScene only exists in their Assembly-CSharp. In the other processes only the settings are available.
+			if (Type.GetType("VRHScene, Assembly-CSharp") == null)
+			{
+				Log.LogInfo($"{PluginName} {Version}: not official VR, settings only");
 				return;
+			}
 
 			Harmony harmony = new Harmony(GUID);
 			harmony.PatchAll(typeof(Hooks));
