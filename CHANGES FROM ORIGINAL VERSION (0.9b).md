@@ -52,3 +52,14 @@
 - Fix SetParentVR not being reset when moving to different H points of the same position
 - Floating menu re-arrangement and other cosmetic changes  
 - Performance improvements and code refactoring
+
+### 2.1.9 (fork: KKTTSPJ/KK_SetParentVR)  
+- Port to BepInEx 5 / HarmonyX. The dll now goes in BepInEx/plugins, and the settings are in BepInEx/config/MK.KK_SetParentVR.cfg  
+- Work in the VR of Koikatsu Party  
+- Load without errors outside VR (the settings can be edited there)  
+- Add an optional diagnostic log (Advanced Settings)  
+- Handle editions of KoikatuVRAssistPlugin without their own input check (game menu on grip long press, speed by stick touch, touch events), without patching KoikatuVRAssistPlugin  
+- Let clicks pass through the empty parts of the floating menu  
+- Fix the control state flipping every frame between Stationary and None while the trigger is held  
+- Fix the control states flipping every frame when several inputs are held with the grip  
+- Guard the male body rotation against NaN, and log when a character's bones become NaN  

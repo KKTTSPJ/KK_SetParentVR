@@ -5,22 +5,26 @@ The original plugin can be found on http://uppervolta-3d.net/illu/upload.php.
 > Control the characters' position, posture, and animation speed with controllers in Koikatsu official VR  
 > *When Illusion doesn't give you more positions, make your own in realtime*
 
+**About this fork**: this is a fork of [MayouKurayami/KK_SetParentVR](https://github.com/MayouKurayami/KK_SetParentVR) 2.1.8 that runs on BepInEx 5 and in Koikatsu Party VR.
+It keeps the original GUID (*MK.KK_SetParentVR*), so it replaces the original plugin. The changes are listed under 2.1.9 in *CHANGES FROM ORIGINAL VERSION (0.9b).md*.
+
 
 
 
 ## Prerequisites  
 - Afterschool DLC  
-- [Koikatsu Official VR Patch 0531](http://www.illusion.jp/preview/koikatu/download/vr.php)
-- BepInEx 4 and above  
- To run it with BepInEx 5 you'd need [BepInEx 4 Patcher](https://github.com/BepInEx/BepInEx.BepInEx4Upgrader), included within HF Patch as an optional plugin   
+- [Koikatsu Official VR Patch 0531](http://www.illusion.jp/preview/koikatu/download/vr.php), or the VR of Koikatsu Party (Steam release)
+- BepInEx 5 (the BepInEx 4 Patcher is no longer needed)
 - (optional, recommended): [CrossFader](https://github.com/MayouKurayami/KK_CrossFader/releases) plugin
 - (optional, strongly recommended): [KoikatuVRAssistPlugin](https://mega.nz/#!YQZyWRwQ!C2FX0Iwp-X7F5z55ytTlQGkjfqH6kQP-wcDPfNBvT0s) plugin
 
 
 ## Installation  
-- [Download **KK_SetParentVR zip** from the latest release](https://github.com/MayouKurayami/KK_SetParentVR/releases)  
+- [Download **KK_SetParentVR zip** from the latest release](https://github.com/KKTTSPJ/KK_SetParentVR/releases)  
 Extract it into your game directory (where the game exe and BepInEx folder are located). Replace old files if asked.  
- *KK_SetParentVR.dll* should end up in the BepInEx root directory.
+ *KK_SetParentVR.dll* should end up in *BepInEx/plugins*.
+
+- Remove the old BepInEx 4 version (*BepInEx/KK_SetParentVR.dll*) if you have it installed. Both versions use the same GUID, so only one of them would load.
 
 - Remove the old IPA version (*SetParentKK.dll*) if you have it installed.  
 
@@ -31,6 +35,9 @@ Then make sure **EnableUGUI** is set to **True** under [*TextFrameworks*] in *Be
 - Installation of the [**CrossFader**](https://github.com/MayouKurayami/KK_CrossFader/releases) plugin is recommended to ensure smooth transitions between animations and poses.
 
 - Also **strongly recommended** is the [**KoikatuVRAssistPlugin**](https://mega.nz/#!YQZyWRwQ!C2FX0Iwp-X7F5z55ytTlQGkjfqH6kQP-wcDPfNBvT0s) plugin found on https://vr-erogamer.com/archives/322, for easier movement and better access to actions in VR. With it installed, one can rotate and move the camera at all times by holding the trigger button. While the UI menu is visible, hold the grip button for 1 second to freeze it in place, and drag and move it by holding the grip button. Double click the grip button to return the menu to your controller.
+
+- Editions of KoikatuVRAssistPlugin that do not check for other inputs by themselves (e.g. KoikatuVRAssistPlugin改 1.2.0.9) are also handled. While SetParent uses its buttons, this plugin keeps the game menu from showing on a grip long press, keeps the stick from changing the speed while the menu floats, and holds off KoikatuVRAssistPlugin's touch events. The touch events come back 0.5 seconds after the buttons are released.  
+Touch events set off by other buttons (e.g. the menu button, or the parent controller when *Disable Input of Parent Controller* is off) still fire. If they get in the way, set those touch events to 0 (none) in KoikatuVRAssistPlugin's settings.
 
 ## Usage  
 ### [Short demo video in Japanese (NSFW) | 日本語の説明動画](https://mega.nz/file/RPpCDKIa#RRb_kYaRrrIqtDyojm3U2BVU_0dgin7B5nNCzXTvVQo)   
@@ -66,7 +73,7 @@ Then make sure **EnableUGUI** is set to **True** under [*TextFrameworks*] in *Be
 <br>
 
 ## Configurations
-Configurations are located in *config.ini* in the BepInEx root folder, under section **MK.KK_SetParentVR**.  
+Configurations are located in *BepInEx/config/MK.KK_SetParentVR.cfg*. The settings of the BepInEx 4 version (in *BepInEx/config.ini*) are not carried over.
 
 ***It is recommended to adjust the configs via the in-game plugin settings page (accessible outside of VR) instead of directly editing the config file.***  
 
@@ -120,6 +127,8 @@ Configurations are located in *config.ini* in the BepInEx root folder, under sec
 
 - **Controller Moved Distance Pool Size (MoveDistancePoolSize)** - Movement amount of the controller will be calculated using the sum of distance moved in this number of frames. **(Default: 55)**
 
+- **Diagnostic Log (DiagnosticLog)** - Log what SetParent does (activation, control state, floating menu buttons, limbs, motion changes) to *output_log.txt*, to check its behavior from the log. **(Default: False)**
+
 - **Male Yaw Rotation (MaleYaw)** - Enable/disable male body's yaw (left/right) rotation when male synchronization is enabled. **(Default: True)**
 
 - **Part of Girl's Body to Parent with The Controller (ParentPart)** - Use this body part to act as the center/origin that will correspond to the movement and rotation of the controller **(Default: Ass)**
@@ -135,9 +144,11 @@ Configurations are located in *config.ini* in the BepInEx root folder, under sec
 <br>
 
 ## Notes and Limitations
-- Unknown compatibility with Koikatsu Party (Steam release)  
+- Works in the VR of Koikatsu Party (Steam release).
 
-- Unknown compatibility with kPlug
+- kPlug: **using it together with kPlug VR is not recommended.** There are unresolved issues:
+  - In kPlug VR, the characters sometimes turned white (and the girl could vanish) while SetParentVR was in use. The cause is not known yet.
+  - In kPlug's extra positions, moving the male (Grip + Trackpad down) or having both characters follow (Grip + Trigger) can make kPlug throw exceptions, which may leave the H scene stuck in an orgasm loop.
 
 - Currently does not work in the unofficial VR mod for main game.  
 
