@@ -730,9 +730,12 @@ namespace SetParentKK
 				else if (currentCtrlstate != CtrlState.Following && TriggerPressing(nonParentSide))
 					currentCtrlstate = ChangeControlState(currentCtrlstate, CtrlState.Following);
 			}
-			else if (currentCtrlstate != CtrlState.Stationary && TriggerPressing(nonParentSide) && hFlag.timeNoClickItem == 0)
+			//Check the state inside: with the check in the condition, an existing Stationary state fell through to None and
+			//flipped between Stationary and None every frame while the trigger was held
+			else if (TriggerPressing(nonParentSide) && hFlag.timeNoClickItem == 0)
 			{
-				currentCtrlstate = ChangeControlState(currentCtrlstate, CtrlState.Stationary);
+				if (currentCtrlstate != CtrlState.Stationary)
+					currentCtrlstate = ChangeControlState(currentCtrlstate, CtrlState.Stationary);
 			}
 			else if (currentCtrlstate != CtrlState.None)
 			{
