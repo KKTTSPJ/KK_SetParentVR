@@ -14,13 +14,15 @@ namespace SetParentKK
 		//https://github.com/DeathWeasel1337/KK_Plugins/blob/master/KK_EyeShaking/KK.EyeShaking.Hooks.cs#L20
 		[HarmonyPostfix]
 		[HarmonyPatch(typeof(VRHScene), "MapSameObjectDisable")]
-		public static void VRHSceneLoadPostfix(VRHScene __instance)
+		//__instance is VRHScene. Parameters are typed object so that this type still loads in normal mode, where VRHScene does not exist
+		public static void VRHSceneLoadPostfix(object __instance)
 		{
+			VRHScene vrHScene = (VRHScene)__instance;
 			if (setParentObj != null)
 				UnityEngine.Object.Destroy(setParentObj);
 
-			setParentObj = __instance.gameObject.AddComponent<SetParent>();
-			setParentObj.Init(__instance.sprites[0], (List<MotionIK>)Traverse.Create(__instance).Field("lstMotionIK").GetValue());
+			setParentObj = vrHScene.gameObject.AddComponent<SetParent>();
+			setParentObj.Init(vrHScene.sprites[0], (List<MotionIK>)Traverse.Create(vrHScene).Field("lstMotionIK").GetValue());
 		}
 
 		[HarmonyPrefix]
@@ -65,7 +67,7 @@ namespace SetParentKK
 		/// </summary>
 		[HarmonyPrefix]
 		[HarmonyPatch(typeof(VRViveController), "IsPressDown")]
-		public static bool IsPressDownPre(VRViveController __instance, ref bool __result)
+		public static bool IsPressDownPre(Component __instance, ref bool __result)
 		{
 			if (!DisableParentInput.Value)
 				return true;
@@ -84,7 +86,7 @@ namespace SetParentKK
 		/// </summary>
 		[HarmonyPrefix]
 		[HarmonyPatch(typeof(VRViveController), "IsPressUp")]
-		public static bool IsPressUpPre(VRViveController __instance, ref bool __result)
+		public static bool IsPressUpPre(Component __instance, ref bool __result)
 		{
 			if (!DisableParentInput.Value)
 				return true;

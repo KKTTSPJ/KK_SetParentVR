@@ -42,7 +42,7 @@ namespace SetParentKK
 			foreach (Side side in Enum.GetValues(typeof(Side)))
 			{
 				viveControllers[side] = controllers[side].GetComponent<VRViveController>();
-				steamVRDevices[side] = f_device.GetValue(viveControllers[side]) as SteamVR_Controller.Device;
+				steamVRDevices[side] = f_device.GetValue(viveControllers[side]);
 			}
 
 			itemHands[0] = Traverse.Create(controllers[Side.Left].transform.Find("Model/p_handL").GetComponent<VRHandCtrl>()).Field("dicItem").GetValue<Dictionary<int, VRHandCtrl.AibuItem>>()[0].objBody.GetComponent<SkinnedMeshRenderer>();
@@ -221,7 +221,7 @@ namespace SetParentKK
 			foreach (Side side in (Side[])Enum.GetValues(typeof(Side)))
 			{
 				if (steamVRDevices[side] == null)
-					steamVRDevices[side] = f_device.GetValue(viveControllers[side]) as SteamVR_Controller.Device;
+					steamVRDevices[side] = f_device.GetValue(viveControllers[side]);
 			}
 
 			//Initiate canvas if it's null
