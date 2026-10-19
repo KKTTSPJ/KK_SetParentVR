@@ -163,6 +163,37 @@ namespace SetParentKK
 			canvasLeft.transform.forward = (canvasLeft.transform.position - cameraEye.transform.position).normalized;
 		}
 
+		private const string VRTKDraggablePanel = "VRTK_UICANVAS_DRAGGABLE_PANEL";
+		private bool draggablePanelLogged;
+
+		/// <summary>
+		/// VRTK_UICanvas covers each canvas with a transparent panel for drag and drop. It is created one frame after the canvas is
+		/// enabled and destroyed when it is disabled, so it is recreated whenever the floating menu is shown again. The panel catches
+		/// pointer clicks on the empty parts of the floating menu, which then block the UI behind it (e.g. the game menu on the
+		/// controller). The floating menu does not use drag and drop, so let clicks pass through the panel; the buttons still catch them.
+		/// </summary>
+		private void LetClicksThroughDraggablePanels()
+		{
+			LetClicksThroughDraggablePanel(objRightMenuCanvas);
+			LetClicksThroughDraggablePanel(objLeftMenuCanvas);
+		}
+
+		private void LetClicksThroughDraggablePanel(GameObject canvas)
+		{
+			if (canvas == null || !canvas.activeInHierarchy)
+				return;
+			Transform panel = canvas.transform.Find(VRTKDraggablePanel);
+			Image image = panel != null ? panel.GetComponent<Image>() : null;
+			if (image == null || !image.raycastTarget)
+				return;
+			image.raycastTarget = false;
+			if (!draggablePanelLogged)
+			{
+				draggablePanelLogged = true;
+				LogDiag($"Floating menu: clicks pass through the empty parts ({VRTKDraggablePanel} of {canvas.name})");
+			}
+		}
+
 		private Text CreateButton(string buttonText, Vector3 localPosition, UnityAction action, GameObject parentObject)
 		{
 			GameObject buttonObject = new GameObject("button");

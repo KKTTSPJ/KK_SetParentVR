@@ -230,6 +230,8 @@ namespace SetParentKK
 				InitCanvas();
 			else
 			{
+				LetClicksThroughDraggablePanels();
+
 				//Hold button for 1 second to hide/unhide floating menu
 				if (MenuPressing(Side.Left) || MenuPressing(Side.Right))
 				{
