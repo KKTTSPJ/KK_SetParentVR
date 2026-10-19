@@ -721,14 +721,19 @@ namespace SetParentKK
 
 			if (GripPressing(nonParentSide))
 			{
-				if (currentCtrlstate != CtrlState.MaleControl && TrackPadDown(nonParentSide))
-					currentCtrlstate = ChangeControlState(currentCtrlstate, CtrlState.MaleControl);
+				//Pick one state from the input, then change only if it differs. Comparing with the current state in each condition
+				//made the states flip every frame when more than one input was held (e.g. grip + trigger with the stick tilted).
+				//The trigger comes first as before cf909ad. With the grip alone, the current state is kept.
+				CtrlState target = currentCtrlstate;
+				if (TriggerPressing(nonParentSide))
+					target = CtrlState.Following;
+				else if (TrackPadDown(nonParentSide))
+					target = CtrlState.MaleControl;
+				else if (TrackPadUp(nonParentSide))
+					target = CtrlState.FemaleControl;
 
-				else if (currentCtrlstate != CtrlState.FemaleControl && TrackPadUp(nonParentSide))
-					currentCtrlstate = ChangeControlState(currentCtrlstate, CtrlState.FemaleControl);
-
-				else if (currentCtrlstate != CtrlState.Following && TriggerPressing(nonParentSide))
-					currentCtrlstate = ChangeControlState(currentCtrlstate, CtrlState.Following);
+				if (target != currentCtrlstate)
+					currentCtrlstate = ChangeControlState(currentCtrlstate, target);
 			}
 			//Check the state inside: with the check in the condition, an existing Stationary state fell through to None and
 			//flipped between Stationary and None every frame while the trigger was held
