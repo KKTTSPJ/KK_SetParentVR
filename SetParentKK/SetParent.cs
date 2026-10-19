@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Linq;
 using Illusion.Component.Correct;
 using UnityEngine;
-using Harmony;
+using HarmonyLib;
 using RootMotion.FinalIK;
 using static SetParentKK.KK_SetParentVR;
 
@@ -27,7 +27,7 @@ namespace SetParentKK
 			{
 				if (!(hSprite = GameObject.Find("VRTK/[VRTK_SDKManager]/SDKSetups/SteamVR/VRCameraBase/[CameraRig]/Controller (left)/Model/p_handL/HSceneMainCanvas/MainCanvas").GetComponent<HSprite>()))
 				{
-					BepInEx.Logger.Log(BepInEx.Logging.LogLevel.Error, "HSprite not found. SetParent will exit");
+					Log.LogError("HSprite not found. SetParent will exit");
 					Destroy(this);
 				}
 			}
