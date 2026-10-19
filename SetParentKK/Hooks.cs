@@ -23,6 +23,17 @@ namespace SetParentKK
 
 			setParentObj = vrHScene.gameObject.AddComponent<SetParent>();
 			setParentObj.Init(vrHScene.sprites[0], (List<MotionIK>)Traverse.Create(vrHScene).Field("lstMotionIK").GetValue());
+			VRAssistCompat.Init();
+		}
+
+		/// <summary>
+		/// Runs before KoikatuVRAssistPlugin's postfix of VRHScene.Update in the same frame (see VRAssistCompat)
+		/// </summary>
+		[HarmonyPrefix]
+		[HarmonyPatch(typeof(VRHScene), "Update")]
+		public static void VRHSceneUpdatePrefix(object __instance)
+		{
+			VRAssistCompat.BeforeAssist(__instance);
 		}
 
 		[HarmonyPrefix]

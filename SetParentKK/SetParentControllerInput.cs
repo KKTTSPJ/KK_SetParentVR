@@ -69,6 +69,12 @@ namespace SetParentKK
 			return ((viveControllers[side] as VRViveController)?.IsPressDown(VRViveController.EViveButtonKind.Grip, -1) ?? false) || ((steamVRDevices[side] as SteamVR_Controller.Device)?.GetPressDown((ulong)1 << 3) ?? false);
 		}
 
+		/// <summary>Raw SteamVR state of a button (bit mask) on a controller, as other plugins read it (not affected by DisableParentInput).</summary>
+		internal bool RawPress(Side side, ulong mask)
+		{
+			return steamVRDevices.TryGetValue(side, out object device) && device is SteamVR_Controller.Device d && d.GetPress(mask);
+		}
+
 		private bool IsDoubleClick(TriggerState input, float threshold)
 		{
 			if (Time.time - lastTriggerRelease[(int)input] > threshold)
