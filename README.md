@@ -1,3 +1,5 @@
+English | [日本語](README_ja.md)
+
 **DISCLAIMER**: This project is an effort to decompile and improve an existing plugin that was not written by me.  
 The original plugin can be found on http://uppervolta-3d.net/illu/upload.php.
 
