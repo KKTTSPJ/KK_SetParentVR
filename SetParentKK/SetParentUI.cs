@@ -188,6 +188,8 @@ namespace SetParentKK
 			buttonObject.transform.localPosition = localPosition;
 			textObject.transform.SetParent(buttonObject.transform);
 			textObject.transform.localPosition = Vector3.zero;
+			//Logged before the action, so the text is the label that was clicked
+			buttonObject.GetComponent<Button>().onClick.AddListener(() => LogDiag($"Floating menu button: {text.text}"));
 			buttonObject.GetComponent<Button>().onClick.AddListener(action);
 
 			return text;

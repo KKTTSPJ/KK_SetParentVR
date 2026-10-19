@@ -50,6 +50,7 @@ namespace SetParentKK
 
 			male = (ChaControl)Traverse.Create(hSprite).Field("male").GetValue();
 			female = ((List<ChaControl>)Traverse.Create(hSprite).Field("females").GetValue())[0];
+			LogDiag($"Attached to the H scene (female: {female.chaFile.parameter.fullname}, mode: {hSprite.flags.mode})");
 			obj_chaF_001 = female.objRoot;
 			male_p_cf_bodybone = male.objAnim;
 			female_p_cf_bodybone = female.objAnim;
@@ -460,6 +461,7 @@ namespace SetParentKK
 			txtSetParentR.text = "親子付け Turn Off";
 
 			setFlag = true;
+			LogDiag($"SetParent on: parent controller {(parentIsLeft ? "left" : "right")}, mode {SetParentMode.Value}, animation {hFlag.nowAnimStateName}");
 		}
 
 		/// <summary>
@@ -502,6 +504,8 @@ namespace SetParentKK
 			txtSetParentL.text = "左 親子付け Turn On";
 			txtSetParentR.text = "右 親子付け Turn On";
 
+			if (setFlag)
+				LogDiag("SetParent off");
 			setFlag = false;
 		}
 
@@ -746,6 +750,7 @@ namespace SetParentKK
 		{
 			if (fromState == toState)
 				return toState;
+			LogDiag($"Control state: {fromState} -> {toState}");
 			
 			// Undo effects of the current state
 			switch (fromState)

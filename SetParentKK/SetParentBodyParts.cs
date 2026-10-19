@@ -72,11 +72,13 @@ namespace SetParentKK
 				limb.AnchorObj.transform.rotation = limb.Effector.bone.rotation;
 				limb.Effector.target = limb.AnchorObj.transform;
 				limb.Fixed = fix;
+				LogDiag($"Limb {limb.LimbPart} fixed{(fix ? " (held)" : "")}");
 				return;
 			}
 			UnityEngine.Object.Destroy(limb.AnchorObj);
 			limb.Effector.target = limb.OrigTarget;
 			limb.Fixed = false;
+			LogDiag($"Limb {limb.LimbPart} released");
 
 			//When the IK target is set to the anchor object and a motion change undergoes, the Basedata bone of the original target would be set to null due to some unknown reason,
 			//causing the effector bone to not approach the target correctly.
@@ -275,7 +277,10 @@ namespace SetParentKK
 				for (int i = (int)LimbName.FemaleLeftHand; i <= (int)LimbName.FemaleRightFoot; i++)
 				{
 					if (limbs[i].AnchorObj && limbs[i].AnchorObj.transform.parent && limbs[i].AnchorObj.transform.parent.parent == controller.transform)
+					{
 						limbs[i].AnchorObj.transform.parent = null;
+						LogDiag($"Limb {limbs[i].LimbPart} let go by {controller.name}");
+					}
 				}
 			}
 			//double click registered

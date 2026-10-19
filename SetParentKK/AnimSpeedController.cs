@@ -116,6 +116,7 @@ namespace SetParentKK
 						{
 							hFlag.click = HFlag.ClickKind.motionchange;
 							weakMotion = false;
+							KK_SetParentVR.LogDiag($"Motion: weak -> strong ({hFlag.nowAnimStateName})");
 							weakMotionCount = 1.5f;
 						}
 					}
@@ -126,6 +127,7 @@ namespace SetParentKK
 						{
 							hFlag.click = HFlag.ClickKind.motionchange;
 							weakMotion = true;
+							KK_SetParentVR.LogDiag($"Motion: strong -> weak ({hFlag.nowAnimStateName})");
 						}
 					}
 					else
@@ -157,6 +159,7 @@ namespace SetParentKK
 					}
 					if (finishCount > 0 && fcount >= finishCount)
 					{
+						KK_SetParentVR.LogDiag($"Autofinish after {fcount:F1} s at full speed");
 						hSprite.OnInsideClick();
 						fcount = 0f;
 						moveFlag = false;

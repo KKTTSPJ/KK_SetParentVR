@@ -90,6 +90,8 @@ namespace SetParentKK
 
 		public static ConfigEntry<float> WeakMotionThreshold { get; private set; }
 
+		public static ConfigEntry<bool> DiagnosticLog { get; private set; }
+
 
 
 		private void Awake()
@@ -170,6 +172,15 @@ namespace SetParentKK
 				"If the movement range of the controller exceeds this threshold, animation will switch to strong motion. Unit in meters");
 			WeakMotionThreshold = Bind(SectionAdvanced, nameof(WeakMotionThreshold), 0.03f, "Weak Motion Threshold",
 				"If the movement range of the controller stays within this threshold for 1.5 seconds, animation will switch to weak motion. Unit in meters");
+			DiagnosticLog = Bind(SectionAdvanced, nameof(DiagnosticLog), false, "Diagnostic Log",
+				"Log what SetParent does (activation, control state, floating menu buttons, limbs, motion changes) to check its behavior from the log");
+		}
+
+		/// <summary>Log a diagnostic message if Diagnostic Log is enabled.</summary>
+		internal static void LogDiag(string message)
+		{
+			if (DiagnosticLog != null && DiagnosticLog.Value)
+				Log.LogInfo(message);
 		}
 
 		/// <summary>

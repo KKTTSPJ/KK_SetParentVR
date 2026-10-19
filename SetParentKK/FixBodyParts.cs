@@ -38,11 +38,13 @@ namespace SetParentKK
 				}
 				setParentObj.FixLimbToggle(setParentObj.limbs[(int)limbName], true);
 				setParentObj.limbs[(int)limbName].AnchorObj.transform.parent = other.transform;
+				KK_SetParentVR.LogDiag($"Limb {limbName} attached to {(other.transform.parent != null ? other.transform.parent.name : other.gameObject.name)}");
 			}
 			else if (setParentObj.setFlag && !setParentObj.limbs[(int)limbName].AnchorObj)
 			{
 				setParentObj.FixLimbToggle(setParentObj.limbs[(int)limbName]);
 				setParentObj.limbs[(int)limbName].AnchorObj.transform.parent = other.transform;
+				KK_SetParentVR.LogDiag($"Limb {limbName} attached to {(other.transform.parent != null ? other.transform.parent.name : other.gameObject.name)}");
 			}
 		}
 
