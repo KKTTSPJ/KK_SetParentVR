@@ -15,10 +15,10 @@ GUID は元のまま（*MK.KK_SetParentVR*）なので、元のプラグイン�
 
 ## 必要なもの
 - アフタースクール（追加ディスク）
-- [コイカツ！公式 VR パッチ 0531](http://www.illusion.jp/preview/koikatu/download/vr.php)、またはコイカツパーティ（Steam 版）の VR
+- コイカツ！公式 VR パッチ 0531、またはコイカツパーティ（Steam 版）の VR
 - BepInEx 5（BepInEx 4 Patcher はもう要りません）
 - （任意、推奨）[CrossFader](https://github.com/MayouKurayami/KK_CrossFader/releases) プラグイン
-- （任意、強く推奨）[KoikatuVRAssistPlugin](https://mega.nz/#!YQZyWRwQ!C2FX0Iwp-X7F5z55ytTlQGkjfqH6kQP-wcDPfNBvT0s) プラグイン
+- （任意、強く推奨）[KoikatuVRAssistPlugin_v1209_release.zip](https://uu.getuploader.com/KKmod/) プラグイン
 
 
 ## 導入
@@ -34,11 +34,11 @@ GUID は元のまま（*MK.KK_SetParentVR*）なので、元のプラグイン�
 
 - アニメーションや体位の切り替えを滑らかにするため、[**CrossFader**](https://github.com/MayouKurayami/KK_CrossFader/releases) プラグインの導入を勧めます。
 
-- https://vr-erogamer.com/archives/322 で配布されている [**KoikatuVRAssistPlugin**](https://mega.nz/#!YQZyWRwQ!C2FX0Iwp-X7F5z55ytTlQGkjfqH6kQP-wcDPfNBvT0s) も**強く推奨**します。VR での移動や操作が楽になります。
+- https://vr-erogamer.com/archives/322 で配布されている [**KoikatuVRAssistPlugin**](https://mega.nz/#!YQZyWRwQ!C2FX0Iwp-X7F5z55ytTlQGkjfqH6kQP-wcDPfNBvT0s) および、改良版である [KoikatuVRAssistPlugin_v1209_release.zip](https://uu.getuploader.com/KKmod/) も**強く推奨**します。VR での移動や操作が楽になります。
   - 入れると、トリガーを押している間はいつでもカメラを回転・移動できます。
   - UI のメニューが出ている間にグリップを 1 秒押すと、メニューをその場に固定できます。グリップを押したままにするとメニューを動かせます。グリップをダブルクリックすると、メニューがコントローラーに戻ります。
 
-- 他の入力を自分で確かめない KoikatuVRAssistPlugin の版（例: KoikatuVRAssistPlugin改 1.2.0.9）にも対応しています。SetParent がボタンを使っている間、このプラグインは次のことをします。
+- [KoikatuVRAssistPlugin_v1209_release.zip](https://uu.getuploader.com/KKmod/) は入力処理がSetParentと競合します。SetParent がボタンを使っている間、以下の競合対策処理を行います。
   - グリップの長押しでゲームのメニューが出ないようにする。
   - メニューが浮いている間、スティックで速度が変わらないようにする。
   - KoikatuVRAssistPlugin のタッチイベントを止める。ボタンを離して 0.5 秒たつと、タッチイベントは元に戻ります。

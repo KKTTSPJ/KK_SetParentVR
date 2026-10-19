@@ -15,10 +15,10 @@ It keeps the original GUID (*MK.KK_SetParentVR*), so it replaces the original pl
 
 ## Prerequisites  
 - Afterschool DLC  
-- [Koikatsu Official VR Patch 0531](http://www.illusion.jp/preview/koikatu/download/vr.php), or the VR of Koikatsu Party (Steam release)
+- Koikatsu Official VR Patch 0531, or the VR of Koikatsu Party (Steam release)
 - BepInEx 5 (the BepInEx 4 Patcher is no longer needed)
 - (optional, recommended): [CrossFader](https://github.com/MayouKurayami/KK_CrossFader/releases) plugin
-- (optional, strongly recommended): [KoikatuVRAssistPlugin](https://mega.nz/#!YQZyWRwQ!C2FX0Iwp-X7F5z55ytTlQGkjfqH6kQP-wcDPfNBvT0s) plugin
+- (optional, strongly recommended): [KoikatuVRAssistPlugin_v1209_release.zip](https://uu.getuploader.com/KKmod/) plugin
 
 
 ## Installation  
@@ -36,9 +36,9 @@ Then make sure **EnableUGUI** is set to **True** under [*TextFrameworks*] in *Be
 
 - Installation of the [**CrossFader**](https://github.com/MayouKurayami/KK_CrossFader/releases) plugin is recommended to ensure smooth transitions between animations and poses.
 
-- Also **strongly recommended** is the [**KoikatuVRAssistPlugin**](https://mega.nz/#!YQZyWRwQ!C2FX0Iwp-X7F5z55ytTlQGkjfqH6kQP-wcDPfNBvT0s) plugin found on https://vr-erogamer.com/archives/322, for easier movement and better access to actions in VR. With it installed, one can rotate and move the camera at all times by holding the trigger button. While the UI menu is visible, hold the grip button for 1 second to freeze it in place, and drag and move it by holding the grip button. Double click the grip button to return the menu to your controller.
+- Also **strongly recommended** are the [**KoikatuVRAssistPlugin**](https://mega.nz/#!YQZyWRwQ!C2FX0Iwp-X7F5z55ytTlQGkjfqH6kQP-wcDPfNBvT0s) plugin found on https://vr-erogamer.com/archives/322 and its improved edition [KoikatuVRAssistPlugin_v1209_release.zip](https://uu.getuploader.com/KKmod/), for easier movement and better access to actions in VR. With it installed, one can rotate and move the camera at all times by holding the trigger button. While the UI menu is visible, hold the grip button for 1 second to freeze it in place, and drag and move it by holding the grip button. Double click the grip button to return the menu to your controller.
 
-- Editions of KoikatuVRAssistPlugin that do not check for other inputs by themselves (e.g. KoikatuVRAssistPlugin改 1.2.0.9) are also handled. While SetParent uses its buttons, this plugin keeps the game menu from showing on a grip long press, keeps the stick from changing the speed while the menu floats, and holds off KoikatuVRAssistPlugin's touch events. The touch events come back 0.5 seconds after the buttons are released.  
+- [KoikatuVRAssistPlugin_v1209_release.zip](https://uu.getuploader.com/KKmod/) conflicts with SetParent's input handling. While SetParent uses its buttons, it does the following to avoid the conflicts: it keeps the game menu from showing on a grip long press, keeps the stick from changing the speed while the menu floats, and holds off KoikatuVRAssistPlugin's touch events. The touch events come back 0.5 seconds after the buttons are released.  
 Touch events set off by other buttons (e.g. the menu button, or the parent controller when *Disable Input of Parent Controller* is off) still fire. If they get in the way, set those touch events to 0 (none) in KoikatuVRAssistPlugin's settings.
 
 ## Usage  
